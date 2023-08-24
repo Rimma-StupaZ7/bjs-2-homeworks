@@ -52,6 +52,8 @@ function debounceDecoratorNew(func, delay) {
     let allCount = 0; // количество всех оберток
   
   function wrapper(...args) {
+    wrapper.allCount++;
+
       if (timeoutId) {
           clearTimeout(timeoutId);
           
@@ -75,7 +77,6 @@ function debounceDecoratorNew(func, delay) {
   return wrapper;
   }
   
-  
   const sendSignal = (signalOrder, delay) => console.log("Сигнал отправлен", signalOrder, delay);
   const upgradedSendSignal = debounceDecoratorNew(sendSignal, 2000);
   setTimeout(() => upgradedSendSignal(1, 0)); // Сигнал отправлен + будет запланирован асинхронный запуск, который будет проигнорирован, так как следующий сигнал отменит предыдущий (300 - 0 < 2000)
@@ -90,4 +91,5 @@ function debounceDecoratorNew(func, delay) {
     console.log(upgradedSendSignal.allCount); // было выполнено 6 вызовов декорированной функции
   }, 7000)
 
+  
   
